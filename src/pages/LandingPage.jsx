@@ -1,8 +1,24 @@
-﻿import ReviewCard from '../components/ReviewCard.jsx';
+﻿import { useEffect, useState } from 'react';
+import ReviewCard from '../components/ReviewCard.jsx';
 import TapIllustration from '../components/TapIllustration.jsx';
 import { GOOGLE_REVIEW_URL } from '../lib/config.js';
+import QRCode from 'qrcode';
 
 export default function LandingPage() {
+  const [qrSvg, setQrSvg] = useState('');
+
+  useEffect(() => {
+    QRCode.toString(GOOGLE_REVIEW_URL, {
+      type: 'svg',
+      errorCorrectionLevel: 'H',
+      margin: 2,
+      color: {
+        dark: '#10251d',
+        light: '#ffffff',
+      },
+    }).then(setQrSvg);
+  }, []);
+
   return (
     <main className="landing-page">
       <section className="review-hero">
@@ -19,7 +35,7 @@ export default function LandingPage() {
         </div>
 
         <div className="review-main-card">
-          <ReviewCard />
+          <ReviewCard qrSvg={qrSvg} />
 
           <div className="tap-review">
             <TapIllustration />
